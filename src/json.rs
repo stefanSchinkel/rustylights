@@ -20,20 +20,32 @@ pub struct Binaries {
     pub codesend: String,
     pub sniff: Option<String>,
 }
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
     pub binaries: Binaries,
+    pub devices: Vec<Device>,
 }
+//
+// pub fn parse() -> Result<Config> {
+//     // read data file
+//     let data: String =
+//         read_to_string(Path::new("./config.json")).expect("Could not read config file");
+//
+//     // parse JSON data to matching structs
+//     // let devs: Devices = serde_json::from_str(&data)?;
+//     let cfg: Config = serde_json::from_str(&data)?;
+//
+//     // return as tuple, cause, well C
+//     Ok(cfg)
+// }
 
-pub fn parse() -> Result<(Devices, Config)> {
-    // read data file
-    let data: String =
-        read_to_string(Path::new("./data.json")).expect("Could not read config file");
-
-    // parse JSON data to matching structs
-    let devs: Devices = serde_json::from_str(&data)?;
-    let cfg: Config = serde_json::from_str(&data)?;
-
-    // return as tuple, cause, well C
-    Ok((devs, cfg))
+// implement
+impl Config {
+    pub fn from_file() -> Result<Self> {
+        let path = Path::new("./config.json");
+        let data: String = read_to_string(path).expect("Could not read config file");
+        let cfg: Config = serde_json::from_str(&data)?;
+        Ok(cfg)
+    }
 }
