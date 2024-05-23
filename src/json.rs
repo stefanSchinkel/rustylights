@@ -26,21 +26,8 @@ pub struct Config {
     pub binaries: Binaries,
     pub devices: Vec<Device>,
 }
-//
-// pub fn parse() -> Result<Config> {
-//     // read data file
-//     let data: String =
-//         read_to_string(Path::new("./config.json")).expect("Could not read config file");
-//
-//     // parse JSON data to matching structs
-//     // let devs: Devices = serde_json::from_str(&data)?;
-//     let cfg: Config = serde_json::from_str(&data)?;
-//
-//     // return as tuple, cause, well C
-//     Ok(cfg)
-// }
 
-// implement
+// implemention for basic reading form files
 impl Config {
     pub fn from_file() -> Result<Self> {
         let path = Path::new("./config.json");
