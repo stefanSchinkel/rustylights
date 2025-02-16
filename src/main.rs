@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate rocket;
 use rocket::serde::{json::Json, Serialize};
+
 use rocket::State;
 // private modeules
 mod json;
@@ -21,7 +22,19 @@ fn index() -> &'static str {
 #[get("/devices")]
 fn get_devices(cfg: &State<Config>) -> Json<Message> {
     let msg = Message {
-        message: format!("Found {} devices", cfg.devices.len()),
+        message: format!(
+            "Found {} devices. Those are: {} and {}",
+            cfg.devices.len(),
+            cfg.devices[0].name,
+            cfg.devices[1].name
+        ),
+    };
+    Json(msg)
+}
+#[get("/devices/<id>")]
+fn show_device(id: u8) -> Json<Message> {
+    let msg = Message {
+        message: format!("this is device {}", id),
     };
     Json(msg)
 }
@@ -36,6 +49,7 @@ fn rocket() -> _ {
         .manage(cfg)
         .mount("/", routes![index])
         .mount("/", routes![get_devices])
+        .mount("/", routes![show_device])
 }
 
 #[cfg(test)]
