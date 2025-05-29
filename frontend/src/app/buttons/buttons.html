@@ -1,1 +1,6 @@
-<p>Make me show some buttons please!</p>
+<ng-container *ngIf="notLoaded; else buttons">
+      .... going there ....
+</ng-container>
+<ng-template #buttons>
+  I's got me sth
+</ng-template>
