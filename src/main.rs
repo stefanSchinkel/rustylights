@@ -2,6 +2,8 @@
 extern crate rocket;
 use rocket::serde::{json::Json, Serialize};
 use rocket::State;
+use std::process::Command;
+
 // private modeules
 mod json;
 use json::Config;
@@ -36,24 +38,34 @@ fn get_device(cfg: &State<Config>, id: i8) -> Json<Message> {
     };
     Json(msg)
 }
+
 #[post("/devices/<id>/on")]
 fn device_on(cfg: &State<Config>, id: i8) -> Json<Message> {
     let msg = Message {
         message: format!(
             "calling {}  {}",
-            cfg.binaries.send, cfg.devices[id as usize].on
+            cfg.binaries.codesend, cfg.devices[id as usize].on
         ),
     };
+    let id = format!("{}", cfg.devices[id as usize].on);
+    let cmd = format!("{}", cfg.binaries.codesend);
+    let out = Command::new(cmd).arg(id).output().expect("sth broke");
+    println!("call returned: {}", out.status);
     Json(msg)
 }
+
 #[post("/devices/<id>/off")]
 fn device_off(cfg: &State<Config>, id: i8) -> Json<Message> {
     let msg = Message {
         message: format!(
             "calling {}  {}",
-            cfg.binaries.send, cfg.devices[id as usize].on
+            cfg.binaries.send, cfg.devices[id as usize].off
         ),
     };
+    let id = format!("{}", cfg.devices[id as usize].off);
+    let cmd = format!("{}", cfg.binaries.codesend);
+    let out = Command::new(cmd).arg(id).output().expect("sth broke");
+    println!("call returned: {}", out.status);
     Json(msg)
 }
 #[launch]
