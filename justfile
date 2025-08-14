@@ -5,10 +5,13 @@ alias bp := build-pi
 alias d := deploy
 
 build:
-	cargo build
+  cargo build
 
 build-pi:
-	cargo build --target=armv7-unknown-linux-musleabihf
+  cargo build --target=armv7-unknown-linux-musleabihf
+
+run:
+  cargo run
 
 deploy:
  scp target/armv7-unknown-linux-gnueabihf/debug/rustylights ${RPI_USER}@${RPI}:${RPI_PATH}/
