@@ -14,4 +14,4 @@ run:
   cargo run
 
 deploy:
- scp target/armv7-unknown-linux-gnueabihf/debug/rustylights ${RPI_USER}@${RPI}:${RPI_PATH}/
+ scp target/armv7-unknown-linux-musleabihf/debug/rustylights ${RPI_USER}@${RPI}:${RPI_PATH}/
