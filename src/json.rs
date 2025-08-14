@@ -6,8 +6,8 @@ use std::path::Path;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Device {
     pub name: String,
-    on: u32,
-    off: u32,
+    pub on: u32,
+    pub off: u32,
 }
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Devices {
