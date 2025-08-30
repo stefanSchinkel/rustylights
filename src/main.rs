@@ -34,14 +34,6 @@ fn get_devices(cfg: &State<Config>) -> Json<Message> {
     Json(msg)
 }
 #[get("/devices/<id>")]
-fn show_device(id: u8) -> Json<Message> {
-    let msg = Message {
-        message: format!("this is device {}", id),
-    };
-    Json(msg)
-}
-
-#[get("/devices/<id>")]
 fn get_device(cfg: &State<Config>, id: i8) -> Json<Message> {
     let msg = Message {
         message: format!(
