@@ -1,6 +1,12 @@
-<ng-container *ngIf="notLoaded; else buttons">
+<ng-container *ngIf="!loaded; else buttons">
       .... going there ....
 </ng-container>
 <ng-template #buttons>
-  I's got me sth
+  <div *ngIf="data && data.length">
+    <div *ngFor="let pair of data; let i = index">
+        <div>{{ data[i].name }} </div>
+        <button (click)="onCB(data[i].id)">ON</button>
+        <button (click)="offCB(data[i].id)">OFF</button>
+    </div>
+  </div>
 </ng-template>
