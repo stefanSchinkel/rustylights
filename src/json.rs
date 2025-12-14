@@ -27,6 +27,12 @@ pub struct Config {
     pub devices: Vec<Device>,
 }
 
+#[derive(Serialize, Debug)]
+pub struct Info {
+    // a mini struct w/ just enough data for the FE go work
+    pub index: usize,
+    pub name: String,
+}
 // implemention for basic reading form files
 impl Config {
     pub fn from_file() -> Result<Self> {
@@ -34,5 +40,17 @@ impl Config {
         let data: String = read_to_string(path).expect("Could not read config file");
         let cfg: Config = serde_json::from_str(&data)?;
         Ok(cfg)
+    }
+    pub fn device_names(&self) -> Vec<Info> {
+        self.devices
+            .iter()
+            .enumerate()
+            .map(|(index, device)| {
+                Info {
+                    index,
+                    name: device.name.clone(), // Clone the string (safe and simple)
+                }
+            })
+            .collect()
     }
 }

@@ -1,13 +1,15 @@
 #[macro_use]
 extern crate rocket;
+use rocket::http::Method;
 use rocket::serde::{json::Json, Serialize};
-
+use rocket_cors::{AllowedHeaders, AllowedOrigins, CorsOptions}; // Import Cors stuff
+                                                                //
 use rocket::State;
 use std::process::Command;
 
 // private modeules
 mod json;
-use json::Config;
+use json::{Config, Info};
 
 // a struct for basic messages
 #[derive(Serialize, Debug)]
@@ -19,6 +21,11 @@ struct Message {
 #[get("/")]
 fn index() -> &'static str {
     "Hello, world!"
+}
+
+#[get("/devlist")]
+fn get_device_list(cfg: &State<Config>) -> Json<Vec<Info>> {
+    Json(cfg.device_names())
 }
 
 #[get("/devices")]
@@ -73,19 +80,37 @@ fn device_off(cfg: &State<Config>, id: i8) -> Json<Message> {
     println!("call returned: {}", out.status);
     Json(msg)
 }
+
 #[launch]
 fn rocket() -> _ {
     let cfg = match Config::from_file() {
         Ok(cfg) => cfg,
         Err(error) => panic!("couldn't load config {:?}", error),
     };
+    // default cors settings
+    // let cors = rocket_cors::CorsOptions::default().to_cors();
+    let cors = CorsOptions::default()
+        .allowed_origins(AllowedOrigins::all()) // Allow all origins
+        .allowed_methods(
+            vec![Method::Get, Method::Post] // Allow common methods
+                .into_iter()
+                .map(From::from)
+                .collect(),
+        )
+        .allowed_headers(AllowedHeaders::all()) // Allow all headers
+        .allow_credentials(false) // Allow cookies/auth (requires specific origin, not '*') - Be careful!
+        .to_cors()
+        .expect("Failed to create CORS fairing."); // Use expect for simplicity here
+
     rocket::build()
         .manage(cfg)
         .mount("/", routes![index])
+        .mount("/", routes![get_device_list])
         .mount("/", routes![get_devices])
         .mount("/", routes![get_device])
         .mount("/", routes![device_on])
         .mount("/", routes![device_off])
+        .attach(cors)
 }
 
 #[cfg(test)]
