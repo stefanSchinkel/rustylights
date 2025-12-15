@@ -9,10 +9,10 @@ pub struct Device {
     pub on: u32,
     pub off: u32,
 }
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Devices {
-    pub devices: Vec<Device>,
-}
+// #[derive(Serialize, Deserialize, Debug)]
+// pub struct Devices {
+//     pub devices: Vec<Device>,
+// }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Binaries {

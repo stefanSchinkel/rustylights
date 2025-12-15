@@ -1,15 +1,16 @@
+use std::process::Command;
+
 #[macro_use]
 extern crate rocket;
 use rocket::http::Method;
 use rocket::serde::{json::Json, Serialize};
+use rocket::State;
 use rocket_cors::{AllowedHeaders, AllowedOrigins, CorsOptions}; // Import Cors stuff
                                                                 //
-use rocket::State;
-use std::process::Command;
 
 // private modeules
 mod json;
-use json::{Config, Info};
+use crate::json::{Config, Info};
 
 // a struct for basic messages
 #[derive(Serialize, Debug)]
