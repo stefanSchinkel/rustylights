@@ -33,22 +33,24 @@ pub struct Info {
     pub index: usize,
     pub name: String,
 }
-// implemention for basic reading form files
 impl Config {
     pub fn from_file() -> Result<Self> {
+        // implemention for reading config from file
         let path = Path::new("./config.json");
         let data: String = read_to_string(path).expect("Could not read config file");
         let cfg: Config = serde_json::from_str(&data)?;
         Ok(cfg)
     }
     pub fn device_names(&self) -> Vec<Info> {
+        // implemention for just name and index (all FE needs)
         self.devices
             .iter()
             .enumerate()
             .map(|(index, device)| {
                 Info {
                     index,
-                    name: device.name.clone(), // Clone the string (safe and simple)
+                    // Clone the string (safe and simple)
+                    name: device.name.clone(),
                 }
             })
             .collect()
